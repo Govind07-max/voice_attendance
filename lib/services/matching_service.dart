@@ -81,6 +81,33 @@ class DefaultNameMatcher implements NameMatcher {
       return MatchResult.multiple(tokenMatches);
     }
 
+    // Step 2b: Every spoken word appears in the student's name. This handles
+    // names where the teacher drops a middle name ("Arnav Patil" ->
+    // "Arnav Santosh Patil") and middle initials ("Arnav P Patil").
+    final queryTokens =
+        query.split(' ').where((token) => token.isNotEmpty).toList();
+    if (queryTokens.length > 1) {
+      List<StudentModel> subsetMatches = enrolledStudents.where((student) {
+        final nameTokens = AppUtils.normalizeName(student.studentName)
+            .split(' ')
+            .where((token) => token.isNotEmpty)
+            .toList();
+        return queryTokens.every((queryToken) {
+          if (queryToken.length == 1) {
+            // A single letter is an initial: it may prefix any name word.
+            return nameTokens.any((nameToken) => nameToken.startsWith(queryToken));
+          }
+          return nameTokens.contains(queryToken);
+        });
+      }).toList();
+
+      if (subsetMatches.length == 1) {
+        return MatchResult.single(subsetMatches.first, 0.88);
+      } else if (subsetMatches.length > 1) {
+        return MatchResult.multiple(subsetMatches);
+      }
+    }
+
     // Step 3: Safe Fuzzy Score Matching (Levenshtein)
     List<MapEntry<StudentModel, double>> scoredCandidates = [];
     for (var student in enrolledStudents) {

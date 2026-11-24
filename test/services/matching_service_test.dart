@@ -39,4 +39,25 @@ void main() {
     final result = matcher.match('John Doe', sampleStudents);
     expect(result.type, MatchType.none);
   });
+
+  test('a dropped middle name still matches', () {
+    final roster = [
+      StudentModel(
+          id: '1', teacherId: 't1', prn: '101',
+          studentName: 'Arnav Santosh Patil'),
+    ];
+    final result = matcher.match('Arnav Patil', roster);
+    expect(result.type, MatchType.single);
+    expect(result.matchedStudent?.studentName, 'Arnav Santosh Patil');
+  });
+
+  test('a spoken middle initial still matches', () {
+    final roster = [
+      StudentModel(
+          id: '1', teacherId: 't1', prn: '101', studentName: 'Arnav Patil'),
+    ];
+    final result = matcher.match('Arnav P Patil', roster);
+    expect(result.type, MatchType.single);
+    expect(result.matchedStudent?.prn, '101');
+  });
 }

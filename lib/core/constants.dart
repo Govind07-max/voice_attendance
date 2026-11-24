@@ -15,23 +15,28 @@ class AppConstants {
   static const String tableAttendanceSessions = 'attendance_sessions';
   static const String tableAttendanceRecords = 'attendance_records';
   static const String tableAttendanceAlerts = 'attendance_alerts';
+  static const String tableAttendanceEdits = 'attendance_edits';
 }
 
 class AppColors {
-  static const Color primary = Color(0xFF1E88E5);
-  static const Color primaryDark = Color(0xFF1565C0);
-  static const Color accent = Color(0xFF00ACC1);
+  // Maytech Warm Orange & Amber Palette
+  static const Color primary = Color(0xFFF97316);      // Warm Maytech / Shadcn Orange
+  static const Color primaryDark = Color(0xFFEA580C);  // Deep Amber Orange
+  static const Color primaryLight = Color(0xFFFFEDD5); // Soft Peach Tint
+  static const Color accent = Color(0xFFFB923C);       // Vibrant Bright Orange
   
-  static const Color background = Color(0xFFF8F9FA);
+  static const Color background = Color(0xFFF8FAFC);   // Crisp Light Slate Canvas
   static const Color cardBackground = Colors.white;
-  static const Color darkBackground = Color(0xFF121212);
-  static const Color darkCardBackground = Color(0xFF1E1E1E);
+  static const Color darkBackground = Color(0xFF0F172A); // Deep Slate Dark
+  static const Color darkCardBackground = Color(0xFF1E293B);
+  static const Color darkDockBackground = Color(0xFF18181B); // Floating Dark Dock
 
-  static const Color success = Color(0xFF4CAF50);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color error = Color(0xFFF44336);
-  static const Color info = Color(0xFF2196F3);
+  static const Color success = Color(0xFF10B981); // Emerald Green
+  static const Color warning = Color(0xFFF59E0B); // Amber Yellow
+  static const Color error = Color(0xFFEF4444);   // Coral Red
+  static const Color info = Color(0xFF3B82F6);    // Sky Indigo
 
-  static const Color textPrimary = Color(0xFF212121);
-  static const Color textSecondary = Color(0xFF757575);
+  static const Color textPrimary = Color(0xFF0F172A);   // Slate 900 Text
+  static const Color textSecondary = Color(0xFF64748B); // Slate 500 Muted Text
+  static const Color borderLight = Color(0xFFE2E8F0);   // Subtle Divider / Border
 }

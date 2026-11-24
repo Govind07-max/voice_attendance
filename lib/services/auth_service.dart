@@ -4,10 +4,12 @@ import '../models/profile.dart';
 
 abstract class AuthService {
   User? get currentUser;
+  Stream<AuthState> get authStateChanges;
   Future<AuthResponse> signIn({required String email, required String password});
   Future<AuthResponse> signUp({required String email, required String password, required String fullName});
   Future<void> signOut();
   Future<TeacherProfile?> fetchProfile();
+  Future<TeacherProfile> ensureProfile({required String fullName, required String email});
   Future<void> updateProfile(TeacherProfile profile);
 }
 
@@ -16,6 +18,9 @@ class SupabaseAuthService implements AuthService {
 
   @override
   User? get currentUser => _client.auth.currentUser;
+
+  @override
+  Stream<AuthState> get authStateChanges => _client.auth.onAuthStateChange;
 
   @override
   Future<AuthResponse> signIn({required String email, required String password}) async {
@@ -52,6 +57,37 @@ class SupabaseAuthService implements AuthService {
         .maybeSingle();
 
     if (response == null) return null;
+    return TeacherProfile.fromJson(response);
+  }
+
+  /// Creates the profile row if the signup trigger did not (e.g. the user
+  /// was created before the trigger existed).
+  @override
+  Future<TeacherProfile> ensureProfile({
+    required String fullName,
+    required String email,
+  }) async {
+    final user = currentUser;
+    if (user == null) {
+      throw Exception('No signed-in user.');
+    }
+
+    final existing = await fetchProfile();
+    if (existing != null) return existing;
+
+    final row = {
+      'id': user.id,
+      'full_name': fullName,
+      'email': email,
+      'department': 'Electronics & Telecommunication Engineering',
+      'default_threshold': 75.0,
+    };
+
+    final response = await _client
+        .from(AppConstants.tableProfiles)
+        .upsert(row, onConflict: 'id')
+        .select()
+        .single();
     return TeacherProfile.fromJson(response);
   }
 

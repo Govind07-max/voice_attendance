@@ -18,11 +18,17 @@ class DuplicateMatchDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Row(
+      title: const Row(
         children: [
-          const Icon(Icons.help_outline, color: AppColors.warning),
-          const SizedBox(width: 8),
-          const Text('Multiple Students Found'),
+          Icon(Icons.help_outline, color: AppColors.warning),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Multiple Students Found',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
       content: Column(
@@ -31,7 +37,8 @@ class DuplicateMatchDialog extends StatelessWidget {
         children: [
           Text(
             'Spoken name "$spokenName" matches multiple enrolled students. Please select the correct student PRN:',
-            style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+            style:
+                const TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 16),
           Flexible(
@@ -42,9 +49,12 @@ class DuplicateMatchDialog extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: AppColors.primary.withOpacity(0.1),
+                        backgroundColor:
+                            AppColors.primary.withValues(alpha: 0.1),
                         child: Text(
-                          student.prn.substring(student.prn.length > 3 ? student.prn.length - 3 : 0),
+                          student.prn.substring(student.prn.length > 3
+                              ? student.prn.length - 3
+                              : 0),
                           style: const TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
@@ -57,7 +67,8 @@ class DuplicateMatchDialog extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: Text('PRN: ${student.prn}'),
-                      trailing: const Icon(Icons.check_circle_outline, color: AppColors.primary),
+                      trailing: const Icon(Icons.check_circle_outline,
+                          color: AppColors.primary),
                       onTap: () {
                         Navigator.of(context).pop();
                         onSelected(student);

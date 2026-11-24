@@ -1,3 +1,4 @@
+import 'class_subject.dart';
 import 'student.dart';
 
 class AttendanceAlertModel {
@@ -59,4 +60,17 @@ class AttendanceAlertModel {
       'error_message': errorMessage,
     };
   }
+}
+
+/// One row of the email history, with its class + subject resolved.
+class AlertHistoryItem {
+  final AttendanceAlertModel alert;
+  final ClassSubjectModel classSubject;
+
+  const AlertHistoryItem({required this.alert, required this.classSubject});
+
+  String get className =>
+      classSubject.classDetails?.className ?? 'Class';
+  String get subjectName =>
+      classSubject.subjectDetails?.subjectName ?? 'Subject';
 }
